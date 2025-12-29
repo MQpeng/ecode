@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js and pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build packages
+        run: pnpm -w -r build
+      - name: Run tests
+        run: pnpm -w -r test --if-present
+      - name: Run linters
+        run: pnpm -w -r lint --if-present
