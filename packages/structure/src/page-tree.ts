@@ -47,27 +47,33 @@ export class PageTree {
     const parent = this.index.get(parentId)
     if (!parent) throw new Error(`Parent ${parentId} not found`)
 
+    // Normalize to ComponentNode and ensure unique ids
     const node = typeof (child as any).type === 'string' && (child as any).id === undefined
       ? parseJSONToTree(child as PageJSON)
       : (child as ComponentNode)
+
+    // Resolve id conflicts: if id exists, generate new ids in subtree
+    const ensureUniqueIds = (n: ComponentNode) => {
+      if (this.index.has(n.id)) {
+        // assign a new id based on type
+        const newId = generateId(n.type.replace(/[^a-z0-9]/gi, '').toLowerCase())
+        n.id = newId
+      }
+      if (n.children) for (const c of n.children) ensureUniqueIds(c)
+    }
+    ensureUniqueIds(node)
 
     if (!parent.children) parent.children = []
     if (typeof atIndex === 'number') parent.children.splice(atIndex, 0, node)
     else parent.children.push(node)
 
-    this.index.set(node.id, node)
-    this.parent.set(node.id, parentId)
-
-    const walkIndex = (n: ComponentNode) => {
-      if (n.children) {
-        for (const c of n.children) {
-          this.index.set(c.id, c)
-          this.parent.set(c.id, n.id)
-          walkIndex(c)
-        }
-      }
+    // Index the new node and its subtree
+    const indexSubtree = (n: ComponentNode, pId: string) => {
+      this.index.set(n.id, n)
+      this.parent.set(n.id, pId)
+      if (n.children) for (const c of n.children) indexSubtree(c, n.id)
     }
-    walkIndex(node)
+    indexSubtree(node, parentId)
 
     return node
   }
@@ -86,15 +92,45 @@ export class PageTree {
     node.id = node.id ?? id
 
     if (!parentNode) {
+      // replacing root -- rebuild index for simplicity
       this.root = node
-    } else {
-      if (!parentNode.children) parentNode.children = []
-      const idx = parentNode.children.findIndex((c) => c.id === id)
-      if (idx === -1) throw new Error('Inconsistent parent-child relationship')
-      parentNode.children[idx] = node
+      this.rebuildIndex()
+      return node
     }
 
-    this.rebuildIndex()
+    // local replace: remove old subtree from index and parent maps, then insert new subtree
+    const idx = parentNode.children ? parentNode.children.findIndex((c) => c.id === id) : -1
+    if (idx === -1) throw new Error('Inconsistent parent-child relationship')
+
+    // remove old subtree
+    const removeSubtree = (n: ComponentNode) => {
+      if (n.children) for (const c of n.children) removeSubtree(c)
+      this.index.delete(n.id)
+      this.parent.delete(n.id)
+    }
+    removeSubtree(parentNode.children[idx])
+
+    // ensure no id collisions in new subtree
+    const ensureUniqueIds = (n: ComponentNode) => {
+      if (this.index.has(n.id) && n.id !== id) {
+        const newId = generateId(n.type.replace(/[^a-z0-9]/gi, '').toLowerCase())
+        n.id = newId
+      }
+      if (n.children) for (const c of n.children) ensureUniqueIds(c)
+    }
+    ensureUniqueIds(node)
+
+    // place new node
+    parentNode.children[idx] = node
+
+    // index new subtree
+    const indexSubtree = (n: ComponentNode, pId: string) => {
+      this.index.set(n.id, n)
+      this.parent.set(n.id, pId)
+      if (n.children) for (const c of n.children) indexSubtree(c, n.id)
+    }
+    indexSubtree(node, parentNode.id)
+
     return node
   }
 
@@ -129,6 +165,13 @@ export class PageTree {
     const newParent = this.index.get(newParentId)
     if (!newParent) throw new Error(`New parent ${newParentId} not found`)
 
+    // Prevent moving into a descendant
+    let p: string | null = newParentId
+    while (p) {
+      if (p === id) throw new Error('Cannot move a node into its own descendant')
+      p = this.parent.get(p) ?? null
+    }
+
     const idx = oldParent.children!.findIndex((c) => c.id === id)
     if (idx === -1) throw new Error('Inconsistent state')
     oldParent.children!.splice(idx, 1)
@@ -144,7 +187,33 @@ export class PageTree {
     walkUpdateParent(node, newParentId)
   }
 
-  toJSON() {
+  toJSON(): string {
+    // Return a compact JSON string representation of the tree
+    return JSON.stringify(formatTreeToJSON(this.root))
+  }
+
+  // Additional helpers
+  toObject() {
     return formatTreeToJSON(this.root)
+  }
+
+  getAncestors(id: string) {
+    const out: ComponentNode[] = []
+    let p = this.parent.get(id) ?? null
+    while (p) {
+      const pn = this.index.get(p)!
+      out.push(pn)
+      p = this.parent.get(p) ?? null
+    }
+    return out
+  }
+
+  size() {
+    return this.index.size
+  }
+
+  toJSON(): string {
+    // Return a compact JSON string representation of the tree
+    return JSON.stringify(formatTreeToJSON(this.root))
   }
 }
