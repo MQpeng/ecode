@@ -42,7 +42,7 @@ function buildIndexes(rootWidget: WidgetTreeNode): Record<string, WidgetTreeInde
  * }} API for querying and mutating the tree
  */
 export function usePageSructure(rootWidget: WidgetTreeNode){
-    const INDEXES_MAP = buildIndexes(rootWidget);
+    let INDEXES_MAP = buildIndexes(rootWidget);
 
     /**
      * Get the widget instance by its node id.
@@ -84,9 +84,7 @@ export function usePageSructure(rootWidget: WidgetTreeNode){
         }
         parentIndex.node.children.push(newWidgetNode);
         // Rebuild indexes from the full root to preserve parent links and remove stale entries
-        const newMap = buildIndexes(rootWidget);
-        for(const k in INDEXES_MAP){ delete INDEXES_MAP[k]; }
-        Object.assign(INDEXES_MAP, newMap);
+        INDEXES_MAP = buildIndexes(rootWidget);
         return true;
     }
 
@@ -104,9 +102,7 @@ export function usePageSructure(rootWidget: WidgetTreeNode){
         if(!parentIndex || !parentIndex.node.children) return false;
         parentIndex.node.children = parentIndex.node.children.filter(child => child.id !== id);
         // Rebuild indexes from the full root to preserve parent links and remove stale entries
-        const newMap = buildIndexes(rootWidget);
-        for(const k in INDEXES_MAP){ delete INDEXES_MAP[k]; }
-        Object.assign(INDEXES_MAP, newMap);
+        INDEXES_MAP = buildIndexes(rootWidget);
         return true;
     }
 
