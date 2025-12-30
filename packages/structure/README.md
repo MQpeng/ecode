@@ -1,59 +1,90 @@
 # @tonyer/structure
 
-⚙️ A small TypeScript library for modeling page structure as a Widget tree (immutable, test-friendly, deterministic ids).
+A small TypeScript utility for modeling and manipulating a page as a tree of widgets.
 
-## Goals
+## ✨ Overview
 
-- Represent a page as a single `WidgetTree` (hierarchy of widgets).
-- Support operations: append/replace/remove/move (all immutable, returning a new `ModelRoot`).
-- Fast lookup by `id` via `ModelRoot`'s internal index (`idMap`).
-- Copy & paste: deep clone a subtree with deterministic id remapping.
-- Low coupling: minimal runtime dependencies and pluggable storage interface for future performance improvements (e.g., red-black tree adapter).
+This package provides lightweight types and helpers for representing a UI page as a widget tree and performing simple, predictable mutations and lookups.
 
-## Quick start
-
-```ts
-import { createModel, ModelRoot, Ops, getGenerateIdFn, Serializer } from '@tonyer/structure';
-// Note: currently use ModelRoot constructor directly
-import type { Widget } from '@tonyer/structure';
-
-const rootWidget: Widget = { type: 'Page', name: 'page', props: {}, events: {} };
-const rootNode = { id: 'root', data: rootWidget, children: [] };
-const model = new ModelRoot(rootNode);
-
-const child: Widget = { type: 'Header', name: 'h', props: {}, events: {} };
-const newModel = Ops.append(model, 'root', child, { idGen: getGenerateIdFn(1) });
-
-console.log(Serializer.toJSON(newModel));
-```
-
-## API (overview)
-
-- Types: `Widget`, `TreeNode`, `Model` exported from package.
-- Id helpers: `getGenerateIdFn(seed?)`, `ensureUniqueId`, `remapIds`.
-- Cloning: `deepCloneNode(node, remapIds?, idGen?)` -> `{ node, idMap }`.
-- Model: `ModelRoot` (fields: `root`, `idMap`, methods: `findById`, `clone`).
-- Operations: `Ops.append`, `Ops.replace`, `Ops.remove`, `Ops.move` (all return new `ModelRoot`).
-- Serializer: `toObject`, `toJSON`, `fromObject`, `fromJSON`.
-
-## Design notes
-
-- Immutability: Ops return new `ModelRoot` instances; the previous model remains intact.
-- Deterministic id generation: Use `getGenerateIdFn(seed)` in tests to make ids predictable.
-- Low coupling: The package exposes a small, stable API and keeps internal storage pluggable. For very large sibling lists a pluggable `OrderedStorage` interface can be implemented and an RB-tree adapter added.
-
-## Tests
-
-Run tests in package:
-
-```bash
-pnpm --filter @tonyer/structure test
-```
-
-## Contributing
-
-Please follow the repository contribution guidelines. Add unit tests for new behavior and keep changes minimal and well-documented.
+Key features:
+- Clear types for widgets and tree nodes (`Widget`, `WidgetTreeNode`, `WidgetTreeIndex`).
+- Utility `usePageSructure(root)` that exposes an index-backed API for O(1) lookups and safe in-place mutations.
+- Simple, dependency-free implementation suitable for tests and small-to-medium page models.
 
 ---
 
-For implementation details and design rationale, see `DESIGN.md`.
+## 🧩 Quick usage
+
+```ts
+import { usePageSructure } from '@tonyer/structure'
+import type { WidgetTreeNode } from '@tonyer/structure'
+
+const root: WidgetTreeNode = {
+  id: 'root',
+  type: 'page',
+  widget: { id: 'root', type: 'page' },
+  children: [
+    { id: 'a', type: 'section', widget: { id: 'a', type: 'section' }, children: [] }
+  ]
+}
+
+const { getWidgetById, getParentWidget, appendWidget, removeWidgetById } = usePageSructure(root)
+
+appendWidget('a', { id: 'a1', type: 'widget', widget: { id: 'a1', type: 'widget' } })
+console.log(getWidgetById('a1')) // -> widget
+console.log(getParentWidget('a1')) // -> widget with id 'a'
+
+removeWidgetById('a1')
+```
+
+---
+
+## 📚 API (surface)
+
+- Types
+  - `Widget` — widget metadata (id, type, optional props, events, etc.)
+  - `WidgetTreeNode` — tree node containing `widget` and optional `children`
+  - `WidgetTreeIndex` — internal index item with `pid` and `node`
+
+- Functions
+  - `usePageSructure(root: WidgetTreeNode)` — returns an API:
+    - `getWidgetById(id: string): Widget | null`
+    - `getParentWidget(id: string): Widget | null`
+    - `appendWidget(parentId: string, newWidgetNode: WidgetTreeNode): boolean`
+    - `removeWidgetById(id: string): boolean`
+
+Notes:
+- `usePageSructure` maintains an internal index for fast lookups and rebuilds it after mutations to keep parent links correct.
+
+---
+
+## ✅ Tests & Benchmarks
+
+- Tests live in `packages/structure/__test__` (Vitest).
+- Benchmarks (placeholders) are in `packages/structure/__benchmarks__`.
+
+Run package tests:
+
+```bash
+pnpm -C packages/structure test
+```
+
+Run workspace tests (root):
+
+```bash
+pnpm -w test
+```
+
+---
+
+## 🤝 Contributing
+
+- Add tests in `__test__` for new behavior.
+- Keep public API stable and document changes in README and `DESIGN.md` when appropriate.
+- Run `pnpm -w test` before opening PRs.
+
+---
+
+## 📄 License
+
+MIT — see the project `LICENSE` for details.
