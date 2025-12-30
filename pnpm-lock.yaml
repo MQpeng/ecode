@@ -48,8 +48,6 @@ importers:
 
   packages/config: {}
 
-  packages/es-toolkit: {}
-
   packages/interaction: {}
 
   packages/runtime: {}

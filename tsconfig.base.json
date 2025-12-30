@@ -14,7 +14,8 @@
     "resolveJsonModule": true,
     "jsx": "preserve",
     "lib": ["ES2022", "DOM"],
-    "composite": true
+    "composite": true,
+    "strictPropertyInitialization": false
   },
   "exclude": ["node_modules", "dist", "**/dist", "**/*.test.ts"],
   "references": []
