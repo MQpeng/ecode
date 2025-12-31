@@ -16,6 +16,7 @@
  * @property {string} [description] - human readable description of the event
  */
 export interface WidgetEvent {
+    label: string;
     params: string[];
     handler: string;
     compiledHandler?: string;

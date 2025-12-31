@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { ConfigLoader, ConfigCompiler, useConfig } from '../src'
+import { ConfigLoader, ConfigCompiler, useConfig } from '../../../src/config'
 
 describe('ConfigLoader', () => {
   it('registers and retrieves loader functions', () => {

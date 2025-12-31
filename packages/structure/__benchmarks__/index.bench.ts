@@ -1,6 +1,6 @@
 import { bench } from 'vitest'
-import { usePageSructure } from '../src/page'
-import type { WidgetTreeNode } from '../src/widget'
+import { usePageSructure } from '../../../src/structure'
+import type { WidgetTreeNode } from '../../../src/structure'
 
 function makeNode(id: string, children?: WidgetTreeNode[]): WidgetTreeNode {
   return { id, type: 'node', widget: { id, type: 'node' }, children }

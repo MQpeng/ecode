@@ -1,2 +1,2 @@
-packages:
-  - 'packages/*'
+# Single-repo mode: workspace removed. No packages are defined.
+# The repository has been flattened into a single package under `src/`.

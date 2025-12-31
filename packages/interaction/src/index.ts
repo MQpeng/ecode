@@ -1,1 +1,9 @@
-export const greet = (who = 'friend') => `hi ${who}`
+export interface InteractionMeta {
+    label: string;
+    eventName: string;
+    effect: Function;
+}
+
+export function useInteraction() {
+    const interactionList = [];
+}

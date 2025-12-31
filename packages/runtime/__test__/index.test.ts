@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { runtimeName } from '../src/index'
+import { runtimeName } from '../../../src/runtime'
 
 describe('runtimeName', () => {
   it('is set', () => {

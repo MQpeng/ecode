@@ -12,5 +12,9 @@
     "bench": "vitest --config ../../vitest.config.ts bench",
     "lint": "eslint . --ext .ts",
     "clean": "rimraf dist"
-  }
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": ["dist"]
 }

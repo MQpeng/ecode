@@ -1,5 +1,5 @@
 import { bench } from 'vitest'
-import { ConfigLoader, ConfigCompiler } from '../src'
+import { ConfigLoader, ConfigCompiler } from '../../../src/config'
 
 bench('ConfigLoader register + get (1k)', () => {
   const loader = new ConfigLoader()

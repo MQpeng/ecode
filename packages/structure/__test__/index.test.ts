@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { usePageSructure } from '../src/page'
-import type { WidgetTreeNode } from '../src/widget'
+import { usePageSructure } from '../../../src/structure'
+import type { WidgetTreeNode } from '../../../src/structure'
 
 function makeNode(id: string, children?: WidgetTreeNode[]): WidgetTreeNode {
   return {

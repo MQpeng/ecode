@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { sharedHello } from '../src/index'
+import { sharedHello } from '../../../src/shared'
 
 describe('sharedHello', () => {
   it('returns a greeting', () => {

@@ -17,9 +17,9 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Build packages
-        run: pnpm -w -r build
+      - name: Build
+        run: pnpm build
       - name: Run tests
-        run: pnpm -w -r test --if-present
+        run: pnpm test --if-present
       - name: Run linters
-        run: pnpm -w -r lint --if-present
+        run: pnpm lint --if-present

@@ -6,19 +6,20 @@
   "engines": {
     "node": ">=18"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
-    "bootstrap": "pnpm -w install && pnpm -w -r build",
-    "build": "pnpm -r --filter ./... run build",
-    "test": "pnpm -r --filter ./... run test",
-    "lint": "pnpm -r --filter ./... run lint",
-    "clean": "pnpm -r --filter ./... run clean",
+    "build": "tsup",
+    "test": "vitest --run",
+    "bench": "vitest bench",
+    "lint": "eslint . --ext .ts",
+    "clean": "rimraf dist",
     "format": "prettier --write \"**/*.{ts,tsx,json,md}\"",
     "addp": "sh ./scripts/git-add-prettier",
-    "prepare": "pnpm -w -r build && husky install"
+    "prepare": "husky install"
   },
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json,md}": [
       "prettier --write"
