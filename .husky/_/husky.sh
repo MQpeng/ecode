@@ -1,11 +1,36 @@
-#!/bin/sh
-# Minimal helper to source Husky's script from node_modules when hooks are run.
-# This mimics what `husky install` would create and avoids needing manual `husky install` first.
-root_dir() { git rev-parse --show-toplevel; }
-ROOT_DIR="$(root_dir)"
+#!/usr/bin/env sh
+if [ -z "$husky_skip_init" ]; then
+  debug () {
+    if [ "$HUSKY_DEBUG" = "1" ]; then
+      echo "husky (debug) - $1"
+    fi
+  }
 
-if [ -f "$ROOT_DIR/node_modules/husky/husky.sh" ]; then
-  . "$ROOT_DIR/node_modules/husky/husky.sh"
-else
-  echo "husky not installed yet. Run 'pnpm install' to install and set up hooks."
+  readonly hook_name="$(basename -- "$0")"
+  debug "starting $hook_name..."
+
+  if [ "$HUSKY" = "0" ]; then
+    debug "HUSKY env variable is set to 0, skipping hook"
+    exit 0
+  fi
+
+  if [ -f ~/.huskyrc ]; then
+    debug "sourcing ~/.huskyrc"
+    . ~/.huskyrc
+  fi
+
+  readonly husky_skip_init=1
+  export husky_skip_init
+  sh -e "$0" "$@"
+  exitCode="$?"
+
+  if [ $exitCode != 0 ]; then
+    echo "husky - $hook_name hook exited with code $exitCode (error)"
+  fi
+
+  if [ $exitCode = 127 ]; then
+    echo "husky - command not found in PATH=$PATH"
+  fi
+
+  exit $exitCode
 fi
