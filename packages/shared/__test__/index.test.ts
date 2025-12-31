@@ -5,4 +5,8 @@ describe('sharedHello', () => {
   it('returns a greeting', () => {
     expect(sharedHello('tonyer')).toBe('hello tonyer')
   })
+
+  it('defaults to world', () => {
+    expect(sharedHello()).toBe('hello world')
+  })
 })

@@ -1,6 +1,6 @@
 import { bench } from 'vitest'
+import { runtimeName } from '../src'
 
-bench('runtime placeholder benchmark', () => {
-  let n = 0
-  for (let i = 0; i < 1000; i++) n += i
+bench('read runtimeName 10k', () => {
+  for (let i = 0; i < 10_000; i++) void runtimeName
 })

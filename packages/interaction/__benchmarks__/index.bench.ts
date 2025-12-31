@@ -1,6 +1,10 @@
 import { bench } from 'vitest'
+import { greet } from '../src'
 
-bench('interaction placeholder benchmark', () => {
-  let n = 0
-  for (let i = 0; i < 1000; i++) n += i
+bench('greet default (1k)', () => {
+  for (let i = 0; i < 1000; i++) greet()
+})
+
+bench('greet with name (1k)', () => {
+  for (let i = 0; i < 1000; i++) greet('bench')
 })
