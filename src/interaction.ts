@@ -1,9 +1,17 @@
+/**
+ * Interaction metadata describing a UI or domain interaction point.
+ */
 export interface InteractionMeta {
     label: string;
     eventName: string;
-    trigger: Function;
+    trigger: (...args: unknown[]) => unknown;
 }
 
+/**
+ * Tiny helper to keep track of interaction metadata keyed by string.
+ * The returned `interactionRelationship` is a Map and can be manipulated directly
+ * in tests or by consumers of this helper.
+ */
 export function useInteraction() {
     const interactionRelationship: Map<string, InteractionMeta> = new Map();
 
@@ -20,6 +28,9 @@ export function useInteraction() {
     }
 
     return {
-        interactionRelationship
+        interactionRelationship,
+        addInteractionMeta,
+        getInteractionMeta,
+        removeInteractionMeta,
     }
 }
