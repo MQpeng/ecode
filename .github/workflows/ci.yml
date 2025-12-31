@@ -20,6 +20,6 @@ jobs:
       - name: Build
         run: pnpm build
       - name: Run tests
-        run: pnpm test --if-present
+        run: pnpm test
       - name: Run linters
-        run: pnpm lint --if-present
+        run: pnpm lint
