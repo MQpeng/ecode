@@ -17,6 +17,6 @@
     "composite": true,
     "strictPropertyInitialization": false
   },
-  "exclude": ["node_modules", "dist", "**/dist", "**/*.test.ts"],
+  "exclude": ["node_modules", "dist", "**/dist"],
   "references": []
 }
