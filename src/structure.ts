@@ -30,7 +30,7 @@ export interface WidgetTreeIndex {
     node: WidgetTreeNode;
 }
 
-function buildIndexes(rootWidget: WidgetTreeNode): Record<string, WidgetTreeIndex>{
+export function buildIndexes(rootWidget: WidgetTreeNode): Record<string, WidgetTreeIndex>{
     const root: WidgetTreeIndex[] = [{pid: undefined, node: rootWidget}];
     const indexesMap: Record<string, WidgetTreeIndex> = {}
     while(root.length){
