@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run lint-staged in the repo (formats staged files with Prettier)
+pnpm -w exec -- lint-staged

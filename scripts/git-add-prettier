@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+# Usage: ./scripts/git-add-prettier <file> [<file> ...]
+# Formats provided files with Prettier, then runs `git add` on them.
+
+if [ "$#" -eq 0 ]; then
+  echo "Usage: $0 <file> [<file> ...]"
+  exit 1
+fi
+
+# Run prettier on all args
+pnpm -w exec -- prettier --write "$@"
+# Add files to git
+git add "$@"
