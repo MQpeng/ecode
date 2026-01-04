@@ -1,7 +1,7 @@
 /**
  * Config loader function type. A loader returns a value of type T.
  */
-export type ConfigLoaderFn<T> = (...args: any[]) => T;
+export type ConfigLoaderFn<T> = (...args: unknown[]) => T;
 
 /**
  * A registry for config loader functions keyed by string.
