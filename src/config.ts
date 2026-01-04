@@ -7,19 +7,19 @@ export type ConfigLoaderFn<T> = () => T;
  * A registry for config loader functions keyed by string.
  */
 export class ConfigLoader {
-    loaderMap: Map<string | Symbol, ConfigLoaderFn<unknown>> = new Map();
+    loaderMap: Map<string | symbol, ConfigLoaderFn<unknown>> = new Map();
 
     /**
      * Register a loader function under a key.
      */
-    registerLoader<T>(key: string | Symbol, loader: ConfigLoaderFn<T>) {
+    registerLoader<T>(key: string | symbol, loader: ConfigLoaderFn<T>) {
         this.loaderMap.set(key, loader as ConfigLoaderFn<unknown>);
     }
 
     /**
      * Retrieve a loader function by key.
      */
-    getLoader<T>(key: string | Symbol): ConfigLoaderFn<T> | undefined {
+    getLoader<T>(key: string | symbol): ConfigLoaderFn<T> | undefined {
         return this.loaderMap.get(key) as ConfigLoaderFn<T> | undefined;
     }
 }
@@ -33,19 +33,19 @@ export type ConfigCompilerFn<T> = (value: T) => unknown;
  * A registry for compiler functions keyed by string.
  */
 export class ConfigCompiler {
-    compilerMap: Map<string | Symbol, ConfigCompilerFn<unknown>> = new Map();
+    compilerMap: Map<string | symbol, ConfigCompilerFn<unknown>> = new Map();
 
     /**
      * Register a compiler function under a key.
      */
-    registerCompiler<T>(key: string | Symbol, compiler: ConfigCompilerFn<T>) {
+    registerCompiler<T>(key: string | symbol, compiler: ConfigCompilerFn<T>) {
         this.compilerMap.set(key, compiler as ConfigCompilerFn<unknown>);
     }
 
     /**
      * Retrieve a compiler function by key.
      */
-    getCompiler<T>(key: string | Symbol): ConfigCompilerFn<T> | undefined {
+    getCompiler<T>(key: string | symbol): ConfigCompilerFn<T> | undefined {
         return this.compilerMap.get(key) as ConfigCompilerFn<T> | undefined;
     }
 }
