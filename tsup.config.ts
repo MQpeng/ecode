@@ -11,5 +11,5 @@ export default defineConfig({
   splitting: false,
   minify: false,
   keepNames: true,
-  external: ['es-toolkit'],
+  external: [],
 })

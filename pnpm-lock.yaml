@@ -4,53 +4,46 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-importers:
-
-  .:
-    dependencies:
-      es-toolkit:
-        specifier: ^1.43.0
-        version: 1.43.0
-    devDependencies:
-      '@types/node':
-        specifier: ^25.0.3
-        version: 25.0.3
-      '@typescript-eslint/eslint-plugin':
-        specifier: ^8.51.0
-        version: 8.51.0(@typescript-eslint/parser@8.51.0)(eslint@8.57.1)(typescript@5.9.3)
-      '@typescript-eslint/parser':
-        specifier: ^8.51.0
-        version: 8.51.0(eslint@8.57.1)(typescript@5.9.3)
-      eslint:
-        specifier: ^8.57.1
-        version: 8.57.1
-      eslint-config-prettier:
-        specifier: ^10.1.8
-        version: 10.1.8(eslint@8.57.1)
-      eslint-plugin-import:
-        specifier: ^2.32.0
-        version: 2.32.0(@typescript-eslint/parser@8.51.0)(eslint@8.57.1)
-      husky:
-        specifier: ^8.0.3
-        version: 8.0.3
-      lint-staged:
-        specifier: ^16.2.7
-        version: 16.2.7
-      prettier:
-        specifier: ^3.7.4
-        version: 3.7.4
-      rimraf:
-        specifier: ^6.1.2
-        version: 6.1.2
-      tsup:
-        specifier: ^8.5.1
-        version: 8.5.1(typescript@5.9.3)
-      typescript:
-        specifier: ^5.9.3
-        version: 5.9.3
-      vitest:
-        specifier: ^4.0.16
-        version: 4.0.16(@types/node@25.0.3)
+devDependencies:
+  '@types/node':
+    specifier: ^25.0.3
+    version: 25.0.3
+  '@typescript-eslint/eslint-plugin':
+    specifier: ^8.51.0
+    version: 8.51.0(@typescript-eslint/parser@8.51.0)(eslint@8.57.1)(typescript@5.9.3)
+  '@typescript-eslint/parser':
+    specifier: ^8.51.0
+    version: 8.51.0(eslint@8.57.1)(typescript@5.9.3)
+  eslint:
+    specifier: ^8.57.1
+    version: 8.57.1
+  eslint-config-prettier:
+    specifier: ^10.1.8
+    version: 10.1.8(eslint@8.57.1)
+  eslint-plugin-import:
+    specifier: ^2.32.0
+    version: 2.32.0(@typescript-eslint/parser@8.51.0)(eslint@8.57.1)
+  husky:
+    specifier: ^8.0.3
+    version: 8.0.3
+  lint-staged:
+    specifier: ^16.2.7
+    version: 16.2.7
+  prettier:
+    specifier: ^3.7.4
+    version: 3.7.4
+  rimraf:
+    specifier: ^6.1.2
+    version: 6.1.2
+  tsup:
+    specifier: ^8.5.1
+    version: 8.5.1(typescript@5.9.3)
+  typescript:
+    specifier: ^5.9.3
+    version: 5.9.3
+  vitest:
+    specifier: ^4.0.16
+    version: 4.0.16(@types/node@25.0.3)
 
 packages:
 
@@ -1323,10 +1316,6 @@ packages:
       is-date-object: 1.1.0
       is-symbol: 1.1.1
     dev: true
-
-  /es-toolkit@1.43.0:
-    resolution: {integrity: sha512-SKCT8AsWvYzBBuUqMk4NPwFlSdqLpJwmy6AP322ERn8W2YLIB6JBXnwMI2Qsh2gfphT3q7EKAxKb23cvFHFwKA==}
-    dev: false
 
   /esbuild@0.27.2:
     resolution: {integrity: sha512-HyNQImnsOC7X9PMNaCIeAm4ISCQXs5a5YasTXVliKv4uuBo1dKrG0A+uQS8M5eXjVMnLg3WgXaKvprHlFJQffw==}
