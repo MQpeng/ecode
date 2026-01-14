@@ -3,7 +3,7 @@ import { Operation, OperationSource, OperationType } from './orchestration/opera
 export interface WidgetNode {
   id: string;
   children: string[];
-  parent: string | null;
+  parent?: string;
 }
 
 export class WidgetTree {
@@ -163,7 +163,7 @@ export class WidgetTree {
         const newNode: WidgetNode = {
             ...originalNode,
             id: newGeneratedId,
-            parent: null, 
+            parent: undefined, 
             children: originalNode.children.map(childId => {
                 copyRecursive(childId);
                 return idMap.get(childId)!;
